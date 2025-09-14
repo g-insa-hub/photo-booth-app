@@ -655,11 +655,6 @@ input[type="radio"]:checked + .photo-content .select-btn {
 
 /* 인쇄용 스타일 */
 @media print {
-    @page {
-        size: auto;
-        margin: 0.5in;
-    }
-
     body * {
         visibility: hidden;
     }
@@ -675,52 +670,34 @@ input[type="radio"]:checked + .photo-content .select-btn {
         width: 100%;
         height: 100%;
         background: white !important;
-        transform: scale(1);
-        transform-origin: top left;
     }
 
     .print-page {
-        padding: 10px;
-        justify-content: center;
-        height: auto;
-        max-width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+        padding: 0;
+        justify-content: space-between;
+        height: 100vh;
     }
 
     .print-photo-container {
-        width: auto;
-        height: auto;
-        max-width: 90%;
-        max-height: 80%;
-        border: 2px solid #ddd;
-        border-radius: 10px;
+        flex: 1;
+        max-width: none;
+        width: 100%;
+        border: none;
+        border-radius: 0;
         margin-bottom: 20px;
-        page-break-inside: avoid;
-    }
-
-    .print-photo-container canvas {
-        width: 100% !important;
-        height: auto !important;
-        max-width: 100%;
-        object-fit: contain;
     }
 
     .print-message {
         margin-bottom: 20px;
-        text-align: center;
-        page-break-inside: avoid;
     }
 
     .print-message h2 {
-        font-size: 2rem;
+        font-size: 2.5rem;
         color: #2c3e50 !important;
-        margin-bottom: 10px;
     }
 
     .sub-message {
-        font-size: 1.5rem;
+        font-size: 1.8rem;
         color: #6c757d !important;
     }
 
