@@ -34,9 +34,12 @@ class PhotoBoothApp {
         const finalPrintBtn = document.getElementById('final-print-btn');
 
         captureBtn.addEventListener('click', () => this.startCountdown());
+        printBtn.addEventListener('click', () => goToPage(3));
         finalPrintBtn.addEventListener('click', () => this.printSelectedPhoto());
 
         printBtn.disabled = true;
+        printBtn.style.opacity = '0.5';
+        printBtn.style.cursor = 'not-allowed';
     }
 
     setupBackgroundSelection() {
@@ -275,7 +278,10 @@ class PhotoBoothApp {
         this.capturePhoto('photo2');
 
         // 인쇄 버튼 활성화
-        document.getElementById('print-btn').disabled = false;
+        const printBtn = document.getElementById('print-btn');
+        printBtn.disabled = false;
+        printBtn.style.opacity = '1';
+        printBtn.style.cursor = 'pointer';
 
         this.isCapturing = false;
     }
