@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포토부스 프로그램</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.10.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@0.1.0/dist/face-landmarks-detection.js"></script>
+</head>
+<body>
+    <!-- Page 1: 프로그램 설명 -->
+    <div id="page1" class="page active">
+        <div class="container">
+            <div class="header">
+                <div class="logo-section">
+                    <div class="company-logo">
+                        <h1>📸 포토부스</h1>
+                    </div>
+                    <div class="character-section">
+                        <div class="character">🎭</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="description">
+                    <h2>AI 포토부스 프로그램</h2>
+                    <p>머신러닝 기반 얼굴 인식으로 다양한 필터 효과를 체험하고<br>
+                    특별한 순간을 기록해보세요!</p>
+
+                    <ul class="features">
+                        <li>🎪 4가지 재미있는 필터 효과</li>
+                        <li>📷 고화질 사진 촬영 (1080x1920)</li>
+                        <li>🖨️ 즉석 인쇄 기능</li>
+                        <li>🤖 AI 얼굴 인식 기술</li>
+                    </ul>
+                </div>
+
+                <div class="date-input">
+                    <label for="today-date">오늘의 날짜:</label>
+                    <input type="date" id="today-date" value="">
+                </div>
+
+                <button class="next-btn" onclick="goToPage(2)">
+                    사진 촬영하러 가기 →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 2: 카메라 및 촬영 -->
+    <div id="page2" class="page">
+        <div class="camera-container">
+            <div class="camera-section">
+                <div class="video-wrapper">
+                    <video id="video" autoplay muted></video>
+                    <canvas id="overlay" width="1080" height="1920"></canvas>
+                    <div id="countdown" class="countdown"></div>
+                </div>
+            </div>
+
+            <div class="controls-section">
+                <div class="background-selection">
+                    <h3>배경 선택</h3>
+                    <div class="bg-buttons">
+                        <button class="bg-btn active" data-bg="0">
+                            <span class="bg-preview">🎪</span>
+                            <span>꼬깔콘</span>
+                        </button>
+                        <button class="bg-btn" data-bg="1">
+                            <span class="bg-preview">😊</span>
+                            <span>부끄럼</span>
+                        </button>
+                        <button class="bg-btn" data-bg="2">
+                            <span class="bg-preview">👑</span>
+                            <span>왕관</span>
+                        </button>
+                        <button class="bg-btn" data-bg="3">
+                            <span class="bg-preview">🎭</span>
+                            <span>마스크</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="capture-btn" class="capture-btn">
+                        📸 사진 촬영
+                    </button>
+                    <button id="print-btn" class="print-btn" onclick="goToPage(3)">
+                        🖨️ 인쇄하기
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <canvas id="capture-canvas" style="display: none;"></canvas>
+    </div>
+
+    <!-- Page 3: 사진 선택 및 인쇄 -->
+    <div id="page3" class="page">
+        <div class="container">
+            <h2>촬영된 사진 선택</h2>
+
+            <div class="photo-selection">
+                <div class="photo-option">
+                    <div class="photo-container">
+                        <canvas id="photo1" width="1080" height="1920"></canvas>
+                    </div>
+                    <p>1초 전 사진</p>
+                    <input type="radio" name="photo-select" value="photo1" id="radio1">
+                    <label for="radio1">선택</label>
+                </div>
+
+                <div class="photo-option">
+                    <div class="photo-container">
+                        <canvas id="photo2" width="1080" height="1920"></canvas>
+                    </div>
+                    <p>최종 사진</p>
+                    <input type="radio" name="photo-select" value="photo2" id="radio2" checked>
+                    <label for="radio2">선택</label>
+                </div>
+            </div>
+
+            <div class="print-controls">
+                <button id="final-print-btn" class="final-print-btn">
+                    🖨️ 인쇄 시작
+                </button>
+                <button class="back-btn" onclick="goToPage(2)">
+                    ← 다시 촬영
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

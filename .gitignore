@@ -1,0 +1,34 @@
+# Node modules
+node_modules/
+
+# Local development
+.env.local
+.env
+
+# Claude settings (keep private)
+.claude/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Build outputs
+dist/
+build/

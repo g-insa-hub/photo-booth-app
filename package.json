@@ -1,0 +1,27 @@
+{
+  "name": "photo-booth-app",
+  "version": "1.0.0",
+  "description": "AI-powered photo booth application with face recognition and filters",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 3000 -c-1",
+    "dev": "npx http-server -p 3000 -c-1 -o",
+    "install-server": "npm install -g http-server"
+  },
+  "keywords": [
+    "photo-booth",
+    "face-detection",
+    "tensorflow",
+    "camera",
+    "filters"
+  ],
+  "author": "Claude Code",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=12.0.0"
+  }
+}
