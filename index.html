@@ -104,31 +104,50 @@
 
             <div class="photo-selection">
                 <div class="photo-option">
-                    <div class="photo-container">
-                        <canvas id="photo1" width="1080" height="1920"></canvas>
+                    <input type="radio" name="photo-select" value="photo1" id="radio1" style="display: none;">
+                    <div class="photo-content">
+                        <div class="photo-container">
+                            <canvas id="photo1" width="1080" height="1920"></canvas>
+                        </div>
+                        <div class="photo-info">
+                            <h3>1초 전 사진</h3>
+                            <label for="radio1" class="select-btn">이 사진 선택</label>
+                        </div>
                     </div>
-                    <p>1초 전 사진</p>
-                    <input type="radio" name="photo-select" value="photo1" id="radio1">
-                    <label for="radio1">선택</label>
                 </div>
 
                 <div class="photo-option">
-                    <div class="photo-container">
-                        <canvas id="photo2" width="1080" height="1920"></canvas>
+                    <input type="radio" name="photo-select" value="photo2" id="radio2" checked style="display: none;">
+                    <div class="photo-content">
+                        <div class="photo-container">
+                            <canvas id="photo2" width="1080" height="1920"></canvas>
+                        </div>
+                        <div class="photo-info">
+                            <h3>최종 사진</h3>
+                            <label for="radio2" class="select-btn">이 사진 선택</label>
+                        </div>
                     </div>
-                    <p>최종 사진</p>
-                    <input type="radio" name="photo-select" value="photo2" id="radio2" checked>
-                    <label for="radio2">선택</label>
                 </div>
             </div>
 
             <div class="print-controls">
-                <button id="final-print-btn" class="final-print-btn">
-                    🖨️ 인쇄 시작
-                </button>
-                <button class="back-btn" onclick="goToPage(2)">
-                    ← 다시 촬영
-                </button>
+                <div class="print-quantity">
+                    <label for="print-count">인쇄 매수:</label>
+                    <div class="quantity-controls">
+                        <button type="button" class="qty-btn" onclick="changePrintQuantity(-1)">-</button>
+                        <input type="number" id="print-count" value="1" min="1" max="10" readonly>
+                        <button type="button" class="qty-btn" onclick="changePrintQuantity(1)">+</button>
+                    </div>
+                </div>
+
+                <div class="control-buttons">
+                    <button id="final-print-btn" class="final-print-btn">
+                        🖨️ 인쇄 시작
+                    </button>
+                    <button class="back-btn" onclick="goToPage(2)">
+                        ← 다시 촬영
+                    </button>
+                </div>
             </div>
         </div>
     </div>

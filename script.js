@@ -320,44 +320,71 @@ class PhotoBoothApp {
             return;
         }
 
-        // 새 창에서 인쇄
-        const printWindow = window.open('', '_blank');
-        printWindow.document.write(`
-            <html>
-                <head>
-                    <title>사진 인쇄</title>
-                    <style>
-                        @page {
-                            size: 54mm 86mm;
-                            margin: 0;
-                        }
-                        body {
-                            margin: 0;
-                            padding: 0;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            min-height: 100vh;
-                        }
-                        img {
-                            width: 54mm;
-                            height: 86mm;
-                            object-fit: cover;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <img src="${selectedPhoto}" alt="인쇄용 사진" />
-                </body>
-            </html>
-        `);
+        const printCount = parseInt(document.getElementById('print-count').value);
 
-        printWindow.document.close();
+        // 인쇄용 스타일시트 생성
+        const printStyle = document.createElement('style');
+        printStyle.innerHTML = `
+            @media print {
+                @page {
+                    size: portrait;
+                    margin: 0;
+                }
+                body {
+                    margin: 0;
+                    padding: 0;
+                }
+                .print-container {
+                    width: 100vw;
+                    height: 100vh;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    page-break-after: always;
+                }
+                .print-container:last-child {
+                    page-break-after: auto;
+                }
+                .print-photo {
+                    width: 100%;
+                    height: auto;
+                    aspect-ratio: 1 / 1.3;
+                    object-fit: cover;
+                }
+            }
+            .no-print {
+                display: none;
+            }
+        `;
+        document.head.appendChild(printStyle);
 
-        // 이미지 로드 후 인쇄
+        // 인쇄용 컨테이너 생성
+        const printDiv = document.createElement('div');
+        printDiv.className = 'no-print';
+
+        for (let i = 0; i < printCount; i++) {
+            const container = document.createElement('div');
+            container.className = 'print-container';
+
+            const img = document.createElement('img');
+            img.src = selectedPhoto;
+            img.className = 'print-photo';
+            img.alt = '인쇄용 사진';
+
+            container.appendChild(img);
+            printDiv.appendChild(container);
+        }
+
+        document.body.appendChild(printDiv);
+
+        // 인쇄 실행
         setTimeout(() => {
-            printWindow.print();
-        }, 1000);
+            window.print();
+
+            // 인쇄 후 정리
+            document.body.removeChild(printDiv);
+            document.head.removeChild(printStyle);
+        }, 500);
     }
 }
 
@@ -396,6 +423,17 @@ function displayCapturedPhotos() {
             };
             img2.src = window.photoBoothApp.capturedPhotos.photo2;
         }
+    }
+}
+
+// 인쇄 매수 조절 함수
+function changePrintQuantity(change) {
+    const printCountInput = document.getElementById('print-count');
+    let currentValue = parseInt(printCountInput.value);
+    let newValue = currentValue + change;
+
+    if (newValue >= 1 && newValue <= 10) {
+        printCountInput.value = newValue;
     }
 }
 

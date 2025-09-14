@@ -182,11 +182,13 @@ body {
 }
 
 #video {
-    width: 100%;
-    height: auto;
-    max-height: 100%;
+    width: auto;
+    height: 100%;
+    aspect-ratio: 1 / 1.3;
     object-fit: cover;
     transform: scaleX(-1);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 }
 
 #overlay {
@@ -195,9 +197,9 @@ body {
     left: 50%;
     transform: translate(-50%, -50%) scaleX(-1);
     pointer-events: none;
-    width: auto;
     height: 100%;
-    max-width: 100%;
+    aspect-ratio: 1 / 1.3;
+    border-radius: 15px;
 }
 
 .countdown {
@@ -337,26 +339,45 @@ body {
 
 .photo-selection {
     display: flex;
-    justify-content: center;
-    gap: 60px;
-    margin-bottom: 80px;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 60px;
     flex: 1;
+    overflow-y: auto;
 }
 
 .photo-option {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 30px;
+    gap: 40px;
+    width: 100%;
+    max-width: 900px;
+    padding: 20px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 20px;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.photo-option:hover {
+    border-color: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.1);
+}
+
+.photo-option input[type="radio"]:checked + .photo-content {
+    border-color: #3498db;
+    background: rgba(52,152,219,0.1);
 }
 
 .photo-container {
-    border: 5px solid rgba(255,255,255,0.3);
-    border-radius: 20px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-radius: 15px;
     overflow: hidden;
     background: #000;
-    width: 400px;
-    height: 711px;
+    width: 250px;
+    height: 325px;
 }
 
 .photo-container canvas {
@@ -365,35 +386,118 @@ body {
     object-fit: cover;
 }
 
-.photo-option p {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #ecf0f1;
+.photo-content {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    width: 100%;
+    padding: 20px;
+    border-radius: 15px;
+    transition: all 0.3s ease;
 }
 
-.photo-option input[type="radio"] {
-    width: 30px;
-    height: 30px;
+.photo-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.photo-info h3 {
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #ecf0f1;
     margin: 0;
 }
 
-.photo-option label {
-    font-size: 2rem;
+.select-btn {
+    font-size: 1.8rem;
     cursor: pointer;
     padding: 15px 30px;
     background: rgba(52,152,219,0.3);
     border-radius: 15px;
     border: 2px solid transparent;
     transition: all 0.3s ease;
+    text-align: center;
+    color: white;
+    font-weight: bold;
 }
 
-.photo-option input[type="radio"]:checked + label {
+.select-btn:hover {
+    background: rgba(52,152,219,0.5);
+    transform: translateY(-2px);
+}
+
+input[type="radio"]:checked + .photo-content {
+    background: rgba(52,152,219,0.1);
+    border: 2px solid #3498db;
+    box-shadow: 0 0 20px rgba(52,152,219,0.3);
+}
+
+input[type="radio"]:checked + .photo-content .select-btn {
     background: rgba(52,152,219,0.8);
     border-color: #3498db;
     box-shadow: 0 0 20px rgba(52,152,219,0.5);
 }
 
 .print-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+.print-quantity {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.print-quantity label {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ecf0f1;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: rgba(255,255,255,0.1);
+    padding: 10px 20px;
+    border-radius: 15px;
+}
+
+.qty-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.qty-btn:hover {
+    background: #2980b9;
+    transform: scale(1.1);
+}
+
+#print-count {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    width: 80px;
+}
+
+.control-buttons {
     display: flex;
     justify-content: center;
     gap: 40px;
