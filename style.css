@@ -8,16 +8,16 @@ body {
     font-family: 'Arial', sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     overflow: hidden;
-    width: 100vw;
-    height: 100vh;
+    width: 1080px;
+    height: 1920px;
     margin: 0;
     padding: 0;
 }
 
 .page {
     display: none;
-    width: 100vw;
-    height: 100vh;
+    width: 1080px;
+    height: 1920px;
     position: absolute;
     top: 0;
     left: 0;
@@ -706,32 +706,3 @@ input[type="radio"]:checked + .photo-content .select-btn {
     }
 }
 
-/* Responsive adjustments for all screen sizes */
-@media screen {
-    * {
-        box-sizing: border-box;
-    }
-
-    body, .page {
-        width: 100vw !important;
-        height: 100vh !important;
-        max-width: 100vw;
-        max-height: 100vh;
-    }
-
-    .container {
-        width: 100%;
-        height: 100%;
-        padding: 2vh;
-    }
-
-    /* 폰트 크기 반응형 조정 */
-    h1 { font-size: clamp(2rem, 5vw, 5rem); }
-    h2 { font-size: clamp(1.5rem, 4vw, 3.5rem); }
-    h3 { font-size: clamp(1.2rem, 3vw, 2.2rem); }
-
-    button {
-        font-size: clamp(1rem, 2.5vw, 2.2rem) !important;
-        padding: clamp(10px, 2vh, 25px) clamp(20px, 5vw, 120px) !important;
-    }
-}
