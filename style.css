@@ -8,14 +8,16 @@ body {
     font-family: 'Arial', sans-serif;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     overflow: hidden;
-    width: 1080px;
-    height: 1920px;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
 }
 
 .page {
     display: none;
-    width: 1080px;
-    height: 1920px;
+    width: 100vw;
+    height: 100vh;
     position: absolute;
     top: 0;
     left: 0;
@@ -339,12 +341,13 @@ body {
 
 .photo-selection {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 40px;
-    margin-bottom: 60px;
+    justify-content: center;
+    gap: 60px;
+    margin-bottom: 40px;
     flex: 1;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 .photo-option {
@@ -376,8 +379,8 @@ body {
     border-radius: 15px;
     overflow: hidden;
     background: #000;
-    width: 500px;
-    height: 650px;
+    width: 300px;
+    height: 390px;
 }
 
 .photo-container canvas {
@@ -517,20 +520,23 @@ input[type="radio"]:checked + .photo-content .select-btn {
 }
 
 .back-btn {
-    background: rgba(255,255,255,0.1);
+    background: linear-gradient(45deg, #e74c3c, #c0392b);
     color: white;
-    border: 2px solid rgba(255,255,255,0.3);
-    padding: 20px 40px;
-    font-size: 2rem;
-    border-radius: 15px;
+    border: none;
+    padding: 25px 120px;
+    font-size: 2.2rem;
+    font-weight: bold;
+    border-radius: 20px;
     cursor: pointer;
     transition: all 0.3s ease;
+    box-shadow: 0 8px 16px rgba(231,76,60,0.3);
+    min-width: 360px;
 }
 
 .back-btn:hover {
-    background: rgba(255,255,255,0.2);
-    border-color: rgba(255,255,255,0.5);
-    transform: translateY(-2px);
+    background: linear-gradient(45deg, #c0392b, #a93226);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(231,76,60,0.4);
 }
 
 /* Page 4 Styles - 인쇄용 페이지 */
@@ -700,15 +706,32 @@ input[type="radio"]:checked + .photo-content .select-btn {
     }
 }
 
-/* Responsive adjustments for screen size */
-@media (max-width: 1080px) {
-    body {
-        width: 100vw;
-        height: 100vh;
+/* Responsive adjustments for all screen sizes */
+@media screen {
+    * {
+        box-sizing: border-box;
     }
 
-    .page {
-        width: 100vw;
-        height: 100vh;
+    body, .page {
+        width: 100vw !important;
+        height: 100vh !important;
+        max-width: 100vw;
+        max-height: 100vh;
+    }
+
+    .container {
+        width: 100%;
+        height: 100%;
+        padding: 2vh;
+    }
+
+    /* 폰트 크기 반응형 조정 */
+    h1 { font-size: clamp(2rem, 5vw, 5rem); }
+    h2 { font-size: clamp(1.5rem, 4vw, 3.5rem); }
+    h3 { font-size: clamp(1.2rem, 3vw, 2.2rem); }
+
+    button {
+        font-size: clamp(1rem, 2.5vw, 2.2rem) !important;
+        padding: clamp(10px, 2vh, 25px) clamp(20px, 5vw, 120px) !important;
     }
 }

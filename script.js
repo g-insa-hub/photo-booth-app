@@ -31,15 +31,22 @@ class PhotoBoothApp {
     setupEventListeners() {
         const captureBtn = document.getElementById('capture-btn');
         const printBtn = document.getElementById('print-btn');
-        const finalPrintBtn = document.getElementById('final-print-btn');
 
         captureBtn.addEventListener('click', () => this.startCountdown());
         printBtn.addEventListener('click', () => goToPage(3));
-        finalPrintBtn.addEventListener('click', () => this.printSelectedPhoto());
 
         printBtn.disabled = true;
         printBtn.style.opacity = '0.5';
         printBtn.style.cursor = 'not-allowed';
+
+        // 사진 선택 버튼 이벤트 리스너 추가
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('select-btn')) {
+                const photoId = e.target.getAttribute('for');
+                document.getElementById(photoId).checked = true;
+                this.selectAndPrintPhoto(photoId.replace('radio', 'photo'));
+            }
+        });
     }
 
     setupBackgroundSelection() {
@@ -125,42 +132,86 @@ class PhotoBoothApp {
 
         const landmarks = face.scaledMesh;
 
-        // 얼굴의 주요 포인트들
-        const noseTip = landmarks[1];
-        const leftEye = landmarks[33];
-        const rightEye = landmarks[263];
-        const leftCheek = landmarks[116];
-        const rightCheek = landmarks[345];
-        const forehead = landmarks[10];
+        // MediaPipe FaceMesh 468 포인트 기반 정확한 얼굴 좌표
+        const facePoints = {
+            // 눈 좌표 (더 정확한 눈 중심)
+            leftEye: this.getEyeCenter(landmarks, [33, 7, 163, 144, 145, 153, 154, 155, 133, 173, 157, 158, 159, 160, 161, 246]),
+            rightEye: this.getEyeCenter(landmarks, [362, 382, 381, 380, 374, 373, 390, 249, 263, 466, 388, 387, 386, 385, 384, 398]),
+
+            // 코 좌표
+            noseTip: landmarks[1],      // 코끝
+            noseBridge: landmarks[6],   // 코 중간
+            noseBase: landmarks[2],     // 코 밑
+
+            // 입술 좌표
+            upperLip: landmarks[13],    // 윗입술 중앙
+            lowerLip: landmarks[14],    // 아랫입술 중앙
+            leftMouth: landmarks[61],   // 입 왼쪽
+            rightMouth: landmarks[291], // 입 오른쪽
+
+            // 볼 좌표
+            leftCheek: landmarks[116],  // 왼쪽 볼
+            rightCheek: landmarks[345], // 오른쪽 볼
+
+            // 이마와 턱 좌표
+            forehead: landmarks[10],    // 이마 중앙
+            chin: landmarks[152],       // 턱 끝
+
+            // 얼굴 윤곽
+            leftJaw: landmarks[172],    // 왼쪽 턱선
+            rightJaw: landmarks[397],   // 오른쪽 턱선
+
+            // 눈썹 좌표
+            leftEyebrow: landmarks[70], // 왼쪽 눈썹
+            rightEyebrow: landmarks[300] // 오른쪽 눈썹
+        };
 
         ctx.save();
 
         switch (filterType) {
             case 0: // 꼬깔콘
-                this.drawPartyHat(ctx, forehead, noseTip);
+                this.drawPartyHat(ctx, facePoints.forehead, facePoints.noseTip, facePoints.leftEye, facePoints.rightEye);
                 break;
             case 1: // 부끄럼 표시
-                this.drawBlush(ctx, leftCheek, rightCheek);
+                this.drawBlush(ctx, facePoints.leftCheek, facePoints.rightCheek, facePoints.leftEye, facePoints.rightEye);
                 break;
             case 2: // 왕관
-                this.drawCrown(ctx, forehead, leftEye, rightEye);
+                this.drawCrown(ctx, facePoints.forehead, facePoints.leftEye, facePoints.rightEye, facePoints.leftEyebrow, facePoints.rightEyebrow);
                 break;
             case 3: // 마스크
-                this.drawMask(ctx, leftEye, rightEye, noseTip);
+                this.drawMask(ctx, facePoints.leftEye, facePoints.rightEye, facePoints.noseTip, facePoints.upperLip, facePoints.chin);
                 break;
         }
 
         ctx.restore();
     }
 
-    drawPartyHat(ctx, forehead, noseTip) {
+    // 눈 중심점 계산 (여러 포인트의 평균)
+    getEyeCenter(landmarks, eyePoints) {
+        let sumX = 0, sumY = 0;
+        eyePoints.forEach(pointIndex => {
+            sumX += landmarks[pointIndex][0];
+            sumY += landmarks[pointIndex][1];
+        });
+        return [sumX / eyePoints.length, sumY / eyePoints.length];
+    }
+
+    drawPartyHat(ctx, forehead, noseTip, leftEye, rightEye) {
+        // 얼굴 크기에 비례하여 모자 크기 계산
+        const faceWidth = Math.abs(rightEye[0] - leftEye[0]);
+        const hatWidth = faceWidth * 1.2;
+        const hatHeight = hatWidth * 1.3;
+
         const centerX = forehead[0];
-        const centerY = forehead[1] - 100;
-        const hatHeight = 150;
-        const hatWidth = 100;
+        const centerY = forehead[1] - hatHeight * 0.3;
+
+        // 그라디언트 배경
+        const gradient = ctx.createLinearGradient(centerX, centerY - hatHeight, centerX, centerY);
+        gradient.addColorStop(0, '#ff6b6b');
+        gradient.addColorStop(1, '#e74c3c');
 
         // 꼬깔콘 그리기
-        ctx.fillStyle = '#ff6b6b';
+        ctx.fillStyle = gradient;
         ctx.beginPath();
         ctx.moveTo(centerX, centerY - hatHeight);
         ctx.lineTo(centerX - hatWidth/2, centerY);
@@ -168,32 +219,74 @@ class PhotoBoothApp {
         ctx.closePath();
         ctx.fill();
 
+        // 테두리
+        ctx.strokeStyle = '#c0392b';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
         // 폼폼 그리기
         ctx.fillStyle = '#ffffff';
         ctx.beginPath();
-        ctx.arc(centerX, centerY - hatHeight, 20, 0, Math.PI * 2);
+        ctx.arc(centerX, centerY - hatHeight, hatWidth * 0.15, 0, Math.PI * 2);
         ctx.fill();
+        ctx.strokeStyle = '#ecf0f1';
+        ctx.lineWidth = 2;
+        ctx.stroke();
 
-        // 패턴
+        // 패턴 점들
         ctx.fillStyle = '#ffffff';
-        for (let i = 0; i < 3; i++) {
+        const dotCount = Math.floor(hatWidth / 40);
+        for (let i = 0; i < dotCount; i++) {
+            const x = centerX - hatWidth/3 + (i * hatWidth/dotCount * 0.6);
+            const y = centerY - hatHeight * 0.3 + (i * 15);
             ctx.beginPath();
-            ctx.arc(centerX - 30 + i * 30, centerY - 50 + i * 25, 8, 0, Math.PI * 2);
+            ctx.arc(x, y, hatWidth * 0.03, 0, Math.PI * 2);
             ctx.fill();
         }
     }
 
-    drawBlush(ctx, leftCheek, rightCheek) {
-        ctx.fillStyle = 'rgba(255, 182, 193, 0.6)';
+    drawBlush(ctx, leftCheek, rightCheek, leftEye, rightEye) {
+        // 얼굴 크기에 비례한 블러시 크기
+        const faceWidth = Math.abs(rightEye[0] - leftEye[0]);
+        const blushSize = faceWidth * 0.15;
 
-        // 왼쪽 볼
+        // 그라디언트 블러시
+        const leftGradient = ctx.createRadialGradient(
+            leftCheek[0], leftCheek[1], 0,
+            leftCheek[0], leftCheek[1], blushSize
+        );
+        leftGradient.addColorStop(0, 'rgba(255, 182, 193, 0.8)');
+        leftGradient.addColorStop(0.7, 'rgba(255, 182, 193, 0.4)');
+        leftGradient.addColorStop(1, 'rgba(255, 182, 193, 0)');
+
+        const rightGradient = ctx.createRadialGradient(
+            rightCheek[0], rightCheek[1], 0,
+            rightCheek[0], rightCheek[1], blushSize
+        );
+        rightGradient.addColorStop(0, 'rgba(255, 182, 193, 0.8)');
+        rightGradient.addColorStop(0.7, 'rgba(255, 182, 193, 0.4)');
+        rightGradient.addColorStop(1, 'rgba(255, 182, 193, 0)');
+
+        // 왼쪽 볼 블러시
+        ctx.fillStyle = leftGradient;
         ctx.beginPath();
-        ctx.ellipse(leftCheek[0] - 30, leftCheek[1], 40, 25, 0, 0, Math.PI * 2);
+        ctx.ellipse(leftCheek[0], leftCheek[1], blushSize, blushSize * 0.7, 0, 0, Math.PI * 2);
         ctx.fill();
 
-        // 오른쪽 볼
+        // 오른쪽 볼 블러시
+        ctx.fillStyle = rightGradient;
         ctx.beginPath();
-        ctx.ellipse(rightCheek[0] + 30, rightCheek[1], 40, 25, 0, 0, Math.PI * 2);
+        ctx.ellipse(rightCheek[0], rightCheek[1], blushSize, blushSize * 0.7, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 하이라이트 효과
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+        ctx.beginPath();
+        ctx.ellipse(leftCheek[0] - blushSize*0.3, leftCheek[1] - blushSize*0.2, blushSize*0.3, blushSize*0.2, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.ellipse(rightCheek[0] - blushSize*0.3, rightCheek[1] - blushSize*0.2, blushSize*0.3, blushSize*0.2, 0, 0, Math.PI * 2);
         ctx.fill();
     }
 
@@ -315,6 +408,22 @@ class PhotoBoothApp {
         }
 
         const selectedPhoto = this.capturedPhotos[selectedRadio.value];
+        if (!selectedPhoto) {
+            alert('선택한 사진이 없습니다.');
+            return;
+        }
+
+        // 4페이지로 이동
+        goToPage(4);
+
+        // 4페이지에 선택된 사진 표시
+        setTimeout(() => {
+            this.displayPrintPhoto(selectedPhoto);
+        }, 100);
+    }
+
+    selectAndPrintPhoto(photoId) {
+        const selectedPhoto = this.capturedPhotos[photoId];
         if (!selectedPhoto) {
             alert('선택한 사진이 없습니다.');
             return;
