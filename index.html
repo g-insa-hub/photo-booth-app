@@ -131,15 +131,6 @@
             </div>
 
             <div class="print-controls">
-                <div class="print-quantity">
-                    <label for="print-count">인쇄 매수:</label>
-                    <div class="quantity-controls">
-                        <button type="button" class="qty-btn" onclick="changePrintQuantity(-1)">-</button>
-                        <input type="number" id="print-count" value="1" min="1" max="10" readonly>
-                        <button type="button" class="qty-btn" onclick="changePrintQuantity(1)">+</button>
-                    </div>
-                </div>
-
                 <div class="control-buttons">
                     <button id="final-print-btn" class="final-print-btn">
                         🖨️ 인쇄 시작
@@ -148,6 +139,27 @@
                         ← 다시 촬영
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 4: 인쇄용 페이지 -->
+    <div id="page4" class="page">
+        <div class="print-page">
+            <div class="print-photo-container">
+                <canvas id="print-photo" width="1080" height="1920"></canvas>
+            </div>
+            <div class="print-message">
+                <h2>나의 미래에 로그인 하다.</h2>
+            </div>
+
+            <div class="print-actions">
+                <button class="print-now-btn" onclick="window.print()">
+                    🖨️ 지금 인쇄하기
+                </button>
+                <button class="back-to-select-btn" onclick="goToPage(3)">
+                    ← 사진 다시 선택
+                </button>
             </div>
         </div>
     </div>

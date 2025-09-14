@@ -320,71 +320,25 @@ class PhotoBoothApp {
             return;
         }
 
-        const printCount = parseInt(document.getElementById('print-count').value);
+        // 4페이지로 이동
+        goToPage(4);
 
-        // 인쇄용 스타일시트 생성
-        const printStyle = document.createElement('style');
-        printStyle.innerHTML = `
-            @media print {
-                @page {
-                    size: portrait;
-                    margin: 0;
-                }
-                body {
-                    margin: 0;
-                    padding: 0;
-                }
-                .print-container {
-                    width: 100vw;
-                    height: 100vh;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    page-break-after: always;
-                }
-                .print-container:last-child {
-                    page-break-after: auto;
-                }
-                .print-photo {
-                    width: 100%;
-                    height: auto;
-                    aspect-ratio: 1 / 1.3;
-                    object-fit: cover;
-                }
-            }
-            .no-print {
-                display: none;
-            }
-        `;
-        document.head.appendChild(printStyle);
-
-        // 인쇄용 컨테이너 생성
-        const printDiv = document.createElement('div');
-        printDiv.className = 'no-print';
-
-        for (let i = 0; i < printCount; i++) {
-            const container = document.createElement('div');
-            container.className = 'print-container';
-
-            const img = document.createElement('img');
-            img.src = selectedPhoto;
-            img.className = 'print-photo';
-            img.alt = '인쇄용 사진';
-
-            container.appendChild(img);
-            printDiv.appendChild(container);
-        }
-
-        document.body.appendChild(printDiv);
-
-        // 인쇄 실행
+        // 4페이지에 선택된 사진 표시
         setTimeout(() => {
-            window.print();
+            this.displayPrintPhoto(selectedPhoto);
+        }, 100);
+    }
 
-            // 인쇄 후 정리
-            document.body.removeChild(printDiv);
-            document.head.removeChild(printStyle);
-        }, 500);
+    displayPrintPhoto(photoDataUrl) {
+        const printCanvas = document.getElementById('print-photo');
+        const ctx = printCanvas.getContext('2d');
+
+        const img = new Image();
+        img.onload = () => {
+            // 캔버스 크기에 맞게 이미지 그리기
+            ctx.drawImage(img, 0, 0, printCanvas.width, printCanvas.height);
+        };
+        img.src = photoDataUrl;
     }
 }
 
@@ -398,6 +352,13 @@ function goToPage(pageNum) {
 
     if (pageNum === 3) {
         displayCapturedPhotos();
+    } else if (pageNum === 4) {
+        // 4페이지로 직접 이동할 때는 기본적으로 photo2를 표시
+        if (window.photoBoothApp && window.photoBoothApp.capturedPhotos.photo2) {
+            setTimeout(() => {
+                window.photoBoothApp.displayPrintPhoto(window.photoBoothApp.capturedPhotos.photo2);
+            }, 100);
+        }
     }
 }
 
