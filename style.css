@@ -388,8 +388,9 @@ body {
 
 .photo-content {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 40px;
+    gap: 20px;
     width: 100%;
     padding: 20px;
     border-radius: 15px;
@@ -397,17 +398,10 @@ body {
 }
 
 .photo-info {
-    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-}
-
-.photo-info h3 {
-    font-size: 2.2rem;
-    font-weight: bold;
-    color: #ecf0f1;
-    margin: 0;
+    align-items: center;
+    gap: 15px;
 }
 
 .select-btn {
@@ -585,9 +579,19 @@ input[type="radio"]:checked + .photo-content .select-btn {
     text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
 
+.sub-message {
+    font-size: 2rem;
+    color: #6c757d;
+    text-align: center;
+    margin: 15px 0 0 0;
+    font-weight: 500;
+}
+
 .print-actions {
     display: flex;
-    gap: 30px;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .print-now-btn {
@@ -622,6 +626,25 @@ input[type="radio"]:checked + .photo-content .select-btn {
 .back-to-select-btn:hover {
     background: rgba(108,117,125,0.2);
     transform: translateY(-2px);
+}
+
+.home-btn {
+    background: linear-gradient(45deg, #3498db, #2980b9);
+    color: white;
+    border: none;
+    padding: 18px 36px;
+    font-size: 1.8rem;
+    font-weight: bold;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(52,152,219,0.3);
+}
+
+.home-btn:hover {
+    background: linear-gradient(45deg, #2980b9, #3498db);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(52,152,219,0.4);
 }
 
 /* 인쇄용 스타일 */
@@ -665,6 +688,11 @@ input[type="radio"]:checked + .photo-content .select-btn {
     .print-message h2 {
         font-size: 2.5rem;
         color: #2c3e50 !important;
+    }
+
+    .sub-message {
+        font-size: 1.8rem;
+        color: #6c757d !important;
     }
 
     .print-actions {

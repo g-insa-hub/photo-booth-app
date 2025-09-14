@@ -100,7 +100,7 @@
     <!-- Page 3: 사진 선택 및 인쇄 -->
     <div id="page3" class="page">
         <div class="container">
-            <h2>촬영된 사진 선택</h2>
+            <h2>사진을 선택해 주세요.</h2>
 
             <div class="photo-selection">
                 <div class="photo-option">
@@ -110,7 +110,6 @@
                             <canvas id="photo1" width="1080" height="1920"></canvas>
                         </div>
                         <div class="photo-info">
-                            <h3>1초 전 사진</h3>
                             <label for="radio1" class="select-btn">이 사진 선택</label>
                         </div>
                     </div>
@@ -123,7 +122,6 @@
                             <canvas id="photo2" width="1080" height="1920"></canvas>
                         </div>
                         <div class="photo-info">
-                            <h3>최종 사진</h3>
                             <label for="radio2" class="select-btn">이 사진 선택</label>
                         </div>
                     </div>
@@ -133,7 +131,7 @@
             <div class="print-controls">
                 <div class="control-buttons">
                     <button id="final-print-btn" class="final-print-btn">
-                        🖨️ 인쇄 시작
+                        선택
                     </button>
                     <button class="back-btn" onclick="goToPage(2)">
                         ← 다시 촬영
@@ -151,6 +149,7 @@
             </div>
             <div class="print-message">
                 <h2>나의 미래에 로그인 하다.</h2>
+                <p class="sub-message">-AI융합교육센터-</p>
             </div>
 
             <div class="print-actions">
@@ -159,6 +158,9 @@
                 </button>
                 <button class="back-to-select-btn" onclick="goToPage(3)">
                     ← 사진 다시 선택
+                </button>
+                <button class="home-btn" onclick="goToPage(1)">
+                    🏠 처음으로
                 </button>
             </div>
         </div>
